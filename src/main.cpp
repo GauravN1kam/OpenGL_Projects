@@ -1,3 +1,3 @@
 #include "HelloWindow/HelloWindow.hpp"
-#include <iostream>
-int main() { CallMain(); }
+#include "Triangle/Triangle.hpp"
+int main() { DrawTriangle(); }
