@@ -1,0 +1,6 @@
+varying 
+
+int main()
+{
+
+}
