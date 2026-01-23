@@ -1,6 +1,5 @@
-#include "glad/glad.h"
-#include <GLFW/glfw3.h>
-#include <iostream>
+#include "Triangle.hpp"
+#include <string>
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window) {
@@ -10,6 +9,55 @@ void processInput(GLFWwindow *window) {
     glClearColor(0.2, 1, 0.6, 1);
     glClear(GL_COLOR_BUFFER_BIT);
   }
+}
+
+GLuint LoadShader(const char *vertPath, const char *fragPath) {
+  std::string vertexCode = readShader(vertPath);
+  std::string fragmentCode = readShader(fragPath);
+
+  const char *vShaderCode = vertexCode.c_str();
+  const char *fShaderCode = fragmentCode.c_str();
+
+  GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+  glShaderSource(vertexShader, 1, &vShaderCode, nullptr);
+  glCompileShader(vertexShader);
+
+  int success;
+  char infoLog[512];
+  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+  if (!success) {
+    glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
+    std::cout << "Vertex Shader Compilation Failed:\n" << infoLog << std::endl;
+  }
+  // --- Fragment Shader ---
+  GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(fragmentShader, 1, &fShaderCode, nullptr);
+  glCompileShader(fragmentShader);
+
+  glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+  if (!success) {
+    glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
+    std::cout << "Fragment Shader Compilation Failed:\n"
+              << infoLog << std::endl;
+  }
+
+  // --- Shader Program ---
+  GLuint shaderProgram = glCreateProgram();
+  glAttachShader(shaderProgram, vertexShader);
+  glAttachShader(shaderProgram, fragmentShader);
+  glLinkProgram(shaderProgram);
+
+  glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+  if (!success) {
+    glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
+    std::cout << "Shader Program Linking Failed:\n" << infoLog << std::endl;
+  }
+
+  // Cleanup
+  glDeleteShader(vertexShader);
+  glDeleteShader(fragmentShader);
+
+  return shaderProgram;
 }
 
 void DrawTriangle() {
@@ -26,57 +74,22 @@ void DrawTriangle() {
     std::cout << "Failed to initialize GLAD" << std::endl;
     return;
   }
-  glViewport(0, 0, 800, 800);
-  glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
   unsigned int VBO;
   glGenBuffers(1, &VBO);
+
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-  const char *vertexShaderSource =
-      "#version 330 core\n"
-      "layout (location = 0) in vec3 aPos;\n"
-      "void main()\n"
-      "{\n"
-      "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-      "}\0";
+  glViewport(0, 0, 800, 800);
+  GLuint shaderProgram = LoadShader("../../shaders/TriangleVertex.vert",
+                                    "../../shaders/TriangleVertex.frag");
 
-  unsigned int vertexShader;
-  vertexShader = glCreateShader(GL_VERTEX_SHADER);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+  glEnableVertexAttribArray(0);
 
-  glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-  glCompileShader(vertexShader);
+  glUseProgram(shaderProgram);
+  glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-  int success;
-  char infoLog[512];
-  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-
-  if (!success) {
-    glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-    std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n"
-              << infoLog << std::endl;
-  }
-
-  const char *fragmentShaderSource =
-      "#version 330 core\n"
-      "out vec4 FragColor\n"
-      "void main()\n"
-      "{\n"
-      "ragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-      "}\0";
-
-  unsigned int fragmentShader;
-  fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-  glCompileShader(fragmentShader);
-
-  unsigned int shaderProgram;
-  shaderProgram = glCreateProgram();
-
-  glAttachShader(shaderProgram, vertexShader);
-  glAttachShader(shaderProgram, fragmentShader);
-  glLinkProgram(shaderProgram);
   while (!glfwWindowShouldClose(window)) {
     glfwPollEvents();
     processInput(window);

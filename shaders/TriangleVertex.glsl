@@ -1,6 +1,0 @@
-varying 
-
-int main()
-{
-
-}
