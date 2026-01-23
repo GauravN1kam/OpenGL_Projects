@@ -7,6 +7,7 @@ find_package(OpenGL REQUIRED)
 add_executable(
 		OpenGL_Projects
 		dependencies/glad/src/glad.c
+		helpers/stringReader.cpp
 		src/HelloWindow/HelloWindow.cpp
 		src/Triangle/Triangle.cpp
     src/main.cpp
