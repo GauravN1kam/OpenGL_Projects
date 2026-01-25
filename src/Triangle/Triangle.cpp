@@ -69,7 +69,8 @@ void DrawTriangle() {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-  float vertices[] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f};
+  float vertices[] = {-0.5f, -0.5f, 0.f, 0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f};
+  float currentTime = (float)glfwGetTime();
   GLFWwindow *window;
 
   window = glfwCreateWindow(800, 800, "DrawTriangle", NULL, NULL);
@@ -95,17 +96,26 @@ void DrawTriangle() {
   glEnableVertexAttribArray(0);
   glBindVertexArray(0);
 
+  int timeLoc = glGetUniformLocation(shaderProgram, "uTime");
+  glUniform1f(timeLoc, currentTime);
+
   glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
   while (!glfwWindowShouldClose(window)) {
     glfwPollEvents();
     processInput(window);
-    glClearColor(0.2f, 0.3f, 0.3f, 1.f);
+
+    glClearColor(0.f, 0.f, 0.f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(shaderProgram);
+
+    float currentTime = (float)glfwGetTime();
+    glUniform1f(timeLoc, currentTime);
+
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 3);
+
     glfwSwapBuffers(window);
   }
 
