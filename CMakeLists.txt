@@ -9,6 +9,7 @@ add_executable(
 		dependencies/glad/src/glad.c
 		helpers/stringReader.cpp
 		src/Shapes/Shapes.cpp
+		src/Shapes/RayMarching.cpp
 		src/HelloWindow/HelloWindow.cpp
 		src/Triangle/Triangle.cpp
     src/main.cpp
