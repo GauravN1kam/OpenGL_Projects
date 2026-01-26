@@ -1,6 +1,6 @@
 #include "Shapes.hpp"
 #include <iostream>
-#include <regex>
+
 bool checkShaderCompile(GLuint shader, const char *name) {
   GLint success;
   glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
