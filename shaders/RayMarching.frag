@@ -9,15 +9,27 @@ float sdSphere(vec3 sphere, float s)
 	return length(sphere) - s;
 }
 
+float sdBox(vec3 point, vec3 box)
+{
+	vec3 q = abs(point) - box;
+	return length(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0);
+}
+
+float smin(float a, float b, float k)
+{
+	float h = max(k - abs(a - b), 0.0) / k;
+	return min(a,b) - h*h*h*k*(1.0/6.0);
+}
+
 float map(vec3 point)
 {
 	vec3 spherePos = vec3(3.0 * sin(uTime), 0.0, 0.0);
 	float sph = sdSphere(point - spherePos, 1.0);
 
-	return sph;
+	float box = sdBox(point, vec3(0.75));
+
+	return smin(sph, box, 2.);
 }
-
-
 
 vec3 palette(float t)
 {
