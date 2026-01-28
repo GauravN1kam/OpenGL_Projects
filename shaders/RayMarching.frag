@@ -28,7 +28,9 @@ float map(vec3 point)
 
 	float box = sdBox(point, vec3(0.75));
 
-	return smin(sph, box, 2.);
+	float ground = point.y + 0.75;
+
+	return smin(ground, smin(sph, box, 2.), 1.0);
 }
 
 vec3 palette(float t)
