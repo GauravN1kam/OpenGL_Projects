@@ -21,12 +21,28 @@ float smin(float a, float b, float k)
 	return min(a,b) - h*h*h*k*(1.0/6.0);
 }
 
+
+mat2 rot2D(float a)
+{
+    float s = sin(a);
+    float c = cos(a);
+
+    return mat2(
+        c, -s,
+        s,  c
+    );
+}
+
 float map(vec3 point)
 {
 	vec3 spherePos = vec3(3.0 * sin(uTime), 0.0, 0.0);
 	float sph = sdSphere(point - spherePos, 1.0);
 
-	float box = sdBox(point, vec3(0.75));
+	vec3 q = point;
+
+	q.xy *= rot2D(uTime) ;
+
+	float box = sdBox(q, vec3(0.75));
 
 	float ground = point.y + 0.75;
 
