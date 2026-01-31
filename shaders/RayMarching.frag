@@ -38,11 +38,11 @@ float map(vec3 point)
 	vec3 spherePos = vec3(3.0 * sin(uTime), 0.0, 0.0);
 	float sph = sdSphere(point - spherePos, 1.0);
 
-	vec3 q = point;
+	// vec3 q = point;
 
-	q.xy *= rot2D(uTime) ;
+	point.xy *= rot2D(uTime) ;
 
-	float box = sdBox(q, vec3(0.75));
+	float box = sdBox(point, vec3(0.75));
 
 	float ground = point.y + 0.75;
 
