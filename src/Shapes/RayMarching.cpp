@@ -37,7 +37,7 @@ void DrawRayMarchingSpace() {
 
   // Loading Shaders from file
 
-  std::string vertexShaderString = readShader("../shaders/Shapes.vert");
+  std::string vertexShaderString = readShader("../shaders/RayMarching.vert");
   std::string fragmentShaderString = readShader("../shaders/RayMarching.frag");
 
   const char *vertexShaderSource = vertexShaderString.c_str();
@@ -111,8 +111,13 @@ void DrawRayMarchingSpace() {
       glfwSetWindowShouldClose(window, true);
 
     int height, width;
+    double mouse_x, mouse_y;
     glfwGetFramebufferSize(window, &width, &height);
     float aspectRatio = (float)width / (float)height;
+
+    glfwGetCursorPos(window, &mouse_x, &mouse_y);
+    float mouseNormX = (float)mouse_x / (float)width * 2.f - 1.f;
+    float mouseNormY = 1.0f - (float)mouse_y / (float)height * 2.f; // flip Y
 
     glClearColor(0.f, 0.1f, 0.1f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -126,6 +131,9 @@ void DrawRayMarchingSpace() {
     float time = (float)glfwGetTime();
     int timeLoc = glGetUniformLocation(shaderProgram, "u_Time");
     glUniform1f(timeLoc, time);
+
+    int mouseLoc = glGetUniformLocation(shaderProgram, "u_Mouse");
+    glUniform2f(mouseLoc, mouseNormX, mouseNormY);
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

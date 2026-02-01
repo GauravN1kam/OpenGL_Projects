@@ -3,6 +3,7 @@
 out vec4 FragColor;
 in vec3 pos;
 in float uTime;
+in vec2 uMouse;
 
 float sdSphere(vec3 sphere, float s)
 {
@@ -40,7 +41,7 @@ float map(vec3 point)
 
 	// vec3 q = point;
 
-	point.xy *= rot2D(uTime) ;
+	// point.xy *= rot2D(uTime) ;
 
 	float box = sdBox(point, vec3(0.75));
 
@@ -69,6 +70,8 @@ void main()
 		vec3 ray_direction = normalize(vec3(uv,1)); 
 		vec3 col = vec3(0.0);
 		float t = 0.0f; //distance traveled;
+		ray_origin.xz *= rot2D(-uMouse.x);
+		ray_direction.xz *= rot2D(-uMouse.x);
 
 		// RayMarching
 		for(int i = 0; i < 80; i++)
@@ -80,6 +83,7 @@ void main()
 			if(d < 0.001 || d > 100.) break;
 
 		}
+
 		col = vec3(t *0.2);
     FragColor = vec4(col, 1.0);
 }
