@@ -36,18 +36,15 @@ mat2 rot2D(float a)
 
 float map(vec3 point)
 {
-	vec3 spherePos = vec3(3.0 * sin(uTime), 0.0, 0.0);
-	float sph = sdSphere(point - spherePos, 1.0);
-
-	// vec3 q = point;
+	point.z += uTime * 0.4;
+	point = fract(point) - 0.5;
 
 	// point.xy *= rot2D(uTime) ;
 
-	float box = sdBox(point, vec3(0.75));
+	float box = sdBox(point, vec3(0.1));
 
-	float ground = point.y + 0.75;
 
-	return smin(ground, smin(sph, box, 2.), 1.0);
+	return box;
 }
 
 vec3 palette(float t)
@@ -70,8 +67,10 @@ void main()
 		vec3 ray_direction = normalize(vec3(uv,1)); 
 		vec3 col = vec3(0.0);
 		float t = 0.0f; //distance traveled;
-		ray_origin.xz *= rot2D(-uMouse.x);
-		ray_direction.xz *= rot2D(-uMouse.x);
+		// ray_origin.yz *= rot2D(uMouse.y);
+		// ray_direction.yz *= rot2D(uMouse.y);
+		// ray_origin.xz *= rot2D(-uMouse.x);
+		// ray_direction.xz *= rot2D(-uMouse.x);
 
 		// RayMarching
 		for(int i = 0; i < 80; i++)
@@ -84,7 +83,7 @@ void main()
 
 		}
 
-		col = vec3(t *0.2);
+		col = vec3(t *0.05);
     FragColor = vec4(col, 1.0);
 }
 
