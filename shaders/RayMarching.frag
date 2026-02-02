@@ -44,6 +44,7 @@ float map(vec3 point)
 	float box = sdBox(point, vec3(0.1));
 
 
+
 	return box;
 }
 
@@ -67,10 +68,10 @@ void main()
 		vec3 ray_direction = normalize(vec3(uv,1)); 
 		vec3 col = vec3(0.0);
 		float t = 0.0f; //distance traveled;
-		// ray_origin.yz *= rot2D(uMouse.y);
-		// ray_direction.yz *= rot2D(uMouse.y);
-		// ray_origin.xz *= rot2D(-uMouse.x);
-		// ray_direction.xz *= rot2D(-uMouse.x);
+		ray_origin.yz *= rot2D(uMouse.y);
+		ray_direction.yz *= rot2D(uMouse.y);
+		ray_origin.xz *= rot2D(-uMouse.x);
+		ray_direction.xz *= rot2D(-uMouse.x);
 
 		// RayMarching
 		for(int i = 0; i < 80; i++)
