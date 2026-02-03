@@ -34,14 +34,24 @@ mat2 rot2D(float a)
     );
 }
 
+float sdOctaHedran(vec3 p, float s)
+{
+	p = abs(p);
+
+	return (p.x + p.y + p.z - s) * 0.57735027;
+}
+
 float map(vec3 point)
 {
 	point.z += uTime * 0.4;
-	point = fract(point) - 0.5;
+
+	point.xy = (fract(point.xy) - 0.5);
+	point.z = mod(point.z, 0.25) - 0.125;
+
 
 	// point.xy *= rot2D(uTime) ;
 
-	float box = sdBox(point, vec3(0.1));
+	float box = sdOctaHedran(point, 0.15);
 
 
 
@@ -54,7 +64,7 @@ vec3 palette(float t)
 	vec3 a = vec3(0.5,0.5,0.5);
 	vec3 b = vec3(0.5,0.5,0.5);
 	vec3 c = vec3(1.0,1.0,1.0);
-	vec3 d = vec3(0.263, 0.146,0.557);
+	vec3 d = vec3(0.263, 0.416,0.557);
 
 	return a + b*cos(6.28318*(c*t+d));
 }
@@ -68,15 +78,20 @@ void main()
 		vec3 ray_direction = normalize(vec3(uv,1)); 
 		vec3 col = vec3(0.0);
 		float t = 0.0f; //distance traveled;
-		ray_origin.yz *= rot2D(uMouse.y);
-		ray_direction.yz *= rot2D(uMouse.y);
-		ray_origin.xz *= rot2D(-uMouse.x);
-		ray_direction.xz *= rot2D(-uMouse.x);
-
+		// ray_origin.yz *= rot2D(uMouse.y);
+		// ray_direction.yz *= rot2D(uMouse.y);
+		// ray_origin.xz *= rot2D(-uMouse.x);
+		// ray_direction.xz *= rot2D(-uMouse.x);
+		//
 		// RayMarching
-		for(int i = 0; i < 80; i++)
+		int i;
+		for(i = 0; i < 80; i++)
 		{
 			vec3 p = ray_origin + ray_direction * t;
+			p.xy *= rot2D(t*0.2 * uMouse.x);
+
+			p.y += sin(t * (uMouse.y+1.) * 0.5) * 0.35;
+
 			float d = map(p);
 			t += d;
 
@@ -84,7 +99,7 @@ void main()
 
 		}
 
-		col = vec3(t *0.05);
+		col = palette(t * 0.04 + float(i) * 0.005);
     FragColor = vec4(col, 1.0);
 }
 
