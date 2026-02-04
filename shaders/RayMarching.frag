@@ -82,7 +82,7 @@ void main()
 		// ray_direction.yz *= rot2D(uMouse.y);
 		// ray_origin.xz *= rot2D(-uMouse.x);
 		// ray_direction.xz *= rot2D(-uMouse.x);
-		//
+
 		// RayMarching
 		int i;
 		for(i = 0; i < 80; i++)
