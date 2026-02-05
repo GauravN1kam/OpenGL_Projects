@@ -1,19 +1,7 @@
+#include "../../helpers/ShaderUtil.hpp"
 #include "Shapes.hpp"
 #include <iostream>
 
-bool checkShaderCompileRayMarching(GLuint shader, const char *name) {
-  GLint success;
-  glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-
-  if (!success) {
-    char log[1024];
-    glGetShaderInfoLog(shader, 1024, nullptr, log);
-    std::cerr << "❌ Shader compile error (" << name << "):\n"
-              << log << std::endl;
-    return false;
-  }
-  return true;
-}
 void framebuffer_size_callback_Shape(GLFWwindow *window, int width,
                                      int height) {
   glViewport(0, 0, width, height);
@@ -36,43 +24,8 @@ void DrawRayMarchingSpace() {
   }
 
   // Loading Shaders from file
-
-  std::string vertexShaderString = readShader("../shaders/RayMarching.vert");
-  std::string fragmentShaderString = readShader("../shaders/RayMarching.frag");
-
-  const char *vertexShaderSource = vertexShaderString.c_str();
-  const char *fragmentShaderSource = fragmentShaderString.c_str();
-
-  // Reading shaders and Compiling them
-
-  unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
-  glCompileShader(vertexShader);
-  if (!checkShaderCompileRayMarching(vertexShader, "Vertex")) {
-    std::cout << "Shader failed\n";
-  }
-
-  unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
-  glCompileShader(fragmentShader);
-  if (!checkShaderCompileRayMarching(fragmentShader, "Fragment")) {
-    std::cout << "Fragement shader failed\n";
-  }
-
-  unsigned int shaderProgram = glCreateProgram();
-  glAttachShader(shaderProgram, vertexShader);
-  glAttachShader(shaderProgram, fragmentShader);
-  glLinkProgram(shaderProgram);
-  int success;
-  char infoLog[512];
-  glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-  if (!success) {
-    glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-    std::cout << "PROGRAM LINK ERROR:\n" << infoLog << std::endl;
-  }
-
-  glDeleteShader(vertexShader);
-  glDeleteShader(fragmentShader);
+  Shader ourShader("../shaders/RayMarching.vert",
+                   "../shaders/RayMarching.frag");
 
   float vertices[] = {
       -1.f, -1.f, 0.0, // first point
@@ -118,22 +71,15 @@ void DrawRayMarchingSpace() {
     glfwGetCursorPos(window, &mouse_x, &mouse_y);
     float mouseNormX = (float)mouse_x / (float)width * 2.f - 1.f;
     float mouseNormY = 1.0f - (float)mouse_y / (float)height * 2.f; // flip Y
+    float time = (float)glfwGetTime();
 
     glClearColor(0.f, 0.1f, 0.1f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT);
     glViewport(0, 0, width, height);
-
-    glUseProgram(shaderProgram);
-
-    int aspectLoc = glGetUniformLocation(shaderProgram, "aspect");
-    glUniform1f(aspectLoc, aspectRatio);
-
-    float time = (float)glfwGetTime();
-    int timeLoc = glGetUniformLocation(shaderProgram, "u_Time");
-    glUniform1f(timeLoc, time);
-
-    int mouseLoc = glGetUniformLocation(shaderProgram, "u_Mouse");
-    glUniform2f(mouseLoc, mouseNormX, mouseNormY);
+    ourShader.use();
+    ourShader.setFloat("aspect", aspectRatio);
+    ourShader.setFloat("u_Time", time);
+    ourShader.Set2Float("u_Mouse", mouseNormX, mouseNormY);
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -143,7 +89,6 @@ void DrawRayMarchingSpace() {
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
   glDeleteBuffers(1, &EBO);
-  glDeleteProgram(shaderProgram);
 
   glfwTerminate();
 }

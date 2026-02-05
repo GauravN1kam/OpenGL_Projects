@@ -1,4 +1,5 @@
 #include "Triangle.hpp"
+#include "../../helpers/ShaderUtil.hpp"
 #include <filesystem>
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
@@ -9,55 +10,6 @@ void processInput(GLFWwindow *window) {
     glClearColor(0.2, 1, 0.6, 1);
     glClear(GL_COLOR_BUFFER_BIT);
   }
-}
-
-GLuint LoadShader(const char *vertPath, const char *fragPath) {
-  std::string vertexCode = readShader(vertPath);
-  std::string fragmentCode = readShader(fragPath);
-
-  const char *vShaderCode = vertexCode.c_str();
-  const char *fShaderCode = fragmentCode.c_str();
-
-  GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vertexShader, 1, &vShaderCode, nullptr);
-  glCompileShader(vertexShader);
-
-  int success;
-  char infoLog[512];
-  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-  if (!success) {
-    glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
-    std::cout << "Vertex Shader Compilation Failed:\n" << infoLog << std::endl;
-  }
-  // --- Fragment Shader ---
-  GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragmentShader, 1, &fShaderCode, nullptr);
-  glCompileShader(fragmentShader);
-
-  glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-  if (!success) {
-    glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
-    std::cout << "Fragment Shader Compilation Failed:\n"
-              << infoLog << std::endl;
-  }
-
-  // --- Shader Program ---
-  unsigned int shaderProgram = glCreateProgram();
-  glAttachShader(shaderProgram, vertexShader);
-  glAttachShader(shaderProgram, fragmentShader);
-  glLinkProgram(shaderProgram);
-
-  glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-  if (!success) {
-    glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
-    std::cout << "Shader Program Linking Failed:\n" << infoLog << std::endl;
-  }
-
-  // Cleanup
-  glDeleteShader(vertexShader);
-  glDeleteShader(fragmentShader);
-
-  return shaderProgram;
 }
 
 void DrawTriangle() {
@@ -81,8 +33,6 @@ void DrawTriangle() {
     std::cout << "Failed to initialize GLAD" << std::endl;
     return;
   }
-  GLuint shaderProgram = LoadShader("../shaders/TriangleVertex.vert",
-                                    "../shaders/TriangleVertex.frag");
   unsigned int VBO;
   unsigned int VAO;
   glGenVertexArrays(1, &VAO);
@@ -96,8 +46,8 @@ void DrawTriangle() {
   glEnableVertexAttribArray(0);
   glBindVertexArray(0);
 
-  int timeLoc = glGetUniformLocation(shaderProgram, "uTime");
-  glUniform1f(timeLoc, currentTime);
+  Shader ourShader("../shaders/TriangleVertex.vert",
+                   "../shaders/TriangleVertex.frag");
 
   glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
@@ -108,10 +58,9 @@ void DrawTriangle() {
     glClearColor(0.f, 0.f, 0.f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glUseProgram(shaderProgram);
+    ourShader.use();
 
-    float currentTime = (float)glfwGetTime();
-    glUniform1f(timeLoc, currentTime);
+    ourShader.setInt("uTime", currentTime);
 
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -121,7 +70,6 @@ void DrawTriangle() {
 
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
-  glDeleteProgram(shaderProgram);
   glfwTerminate();
 }
 
