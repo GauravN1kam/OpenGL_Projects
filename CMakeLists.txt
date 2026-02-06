@@ -17,6 +17,7 @@ add_executable(
     helpers/stringReader.cpp
 		helpers/ShaderUtil.cpp
     src/Shapes/Shapes.cpp
+		src/MandelBrot/MandelBrot.cpp
     src/Shapes/RayMarching.cpp
     src/HelloWindow/HelloWindow.cpp
     src/Triangle/Triangle.cpp
