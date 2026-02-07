@@ -1,4 +1,8 @@
 #version 330 core
+uniform float aspect;
+uniform float u_Time;
+uniform vec2 u_Mouse;
+
 
 out vec4 FragColor;
 in vec3 pos;
