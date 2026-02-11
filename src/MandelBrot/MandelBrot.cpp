@@ -73,10 +73,10 @@ void DrawMandelBrot() {
     ourShader.setFloat("aspect", aspectRatio);
     ourShader.setFloat("u_Time", time);
     ourShader.Set2Float("u_Mouse", mouseNormX, mouseNormY);
-    ourShader.setFloat("Minx", -2.5f);
-    ourShader.setFloat("Maxx", 1.0f);
-    ourShader.setFloat("Miny", -1.5f);
-    ourShader.setFloat("Maxy", 1.5f);
+    ourShader.setFloat("Minx", -2.0f);
+    ourShader.setFloat("Maxx", 1.12f);
+    ourShader.setFloat("Miny", -1.12f);
+    ourShader.setFloat("Maxy", 0.47f);
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
