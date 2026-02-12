@@ -21,13 +21,22 @@ void DrawCube() {
   Shader ourShader("../shaders/MandelBrot.vert", "../shaders/MandelBrot.frag");
 
   float vertices[] = {
-      -1.f, -1.f, 0.0, // first point
-      1.f,  -1.f, 0.0, // second point
-      1.f,  1.f,  0.0, // Third point
-      -1.f, 1.f,  0.0  // fouth point
+      -0.5f, -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, 0.5f,  0.5f,  -0.5f, 0.5f,
+      0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f,
+      0.5f,  0.5f,  -0.5f, 0.5f,  0.5f,  0.5f,  0.5f,  0.5f,  0.5f,  0.5f,
+      -0.5f, 0.5f,  0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, 0.5f,  0.5f,  -0.5f,
+      0.5f,  -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f,
+      0.5f,  -0.5f, 0.5f,  0.5f,  0.5f,  0.5f,  0.5f,  0.5f,  0.5f,  -0.5f,
+      0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, 0.5f,  0.5f,
+      0.5f,  0.5f,  -0.5f, -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f,
+      0.5f,  0.5f,  -0.5f, 0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, -0.5f,
+      -0.5f, 0.5f,  -0.5f, 0.5f,  0.5f,  -0.5f, 0.5f,  0.5f,  0.5f,  0.5f,
+      0.5f,  0.5f,  -0.5f, 0.5f,  0.5f,  -0.5f, 0.5f,  -0.5f,
   };
 
-  unsigned int points[] = {0, 1, 2, 2, 3, 0};
+  unsigned int points[] = {0,  1,  2,  4,  5,  6,  7,  8,  9,  10, 11, 12,
+                           13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+                           25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
 
   unsigned int VAO, VBO, EBO;
 
@@ -56,11 +65,12 @@ void DrawCube() {
       glfwSetWindowShouldClose(window, true);
 
     ourShader.use();
+
     glClearColor(0.f, 0.1f, 0.1f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
