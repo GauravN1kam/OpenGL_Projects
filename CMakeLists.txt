@@ -18,6 +18,7 @@ add_executable(
 		helpers/ShaderUtil.cpp
     src/Shapes/Shapes.cpp
 		src/MandelBrot/MandelBrot.cpp
+		src/Going3D/Cube.cpp
     src/Shapes/RayMarching.cpp
     src/HelloWindow/HelloWindow.cpp
     src/Triangle/Triangle.cpp

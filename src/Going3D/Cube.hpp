@@ -1,3 +1,4 @@
+#pragma once
 #include "../../helpers/ShaderUtil.hpp"
 #include "glad/glad.h"
 #include "glm/glm.hpp"

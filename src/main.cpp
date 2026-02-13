@@ -1,3 +1,4 @@
+#include "Going3D/Cube.hpp"
 #include "HelloWindow/HelloWindow.hpp"
 #include "MandelBrot/MandelBrot.hpp"
 #include "Shapes/Shapes.hpp"
@@ -11,5 +12,5 @@ int main() {
   // trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
   // vec = trans * vec;
   // std::cout << vec.x << vec.y << vec.z << std::endl;
-  DrawMandelBrot();
+  DrawSqaure();
 }
