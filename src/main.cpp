@@ -1,4 +1,3 @@
-#include "Going3D/Cube.hpp"
 #include "HelloWindow/HelloWindow.hpp"
 #include "MandelBrot/MandelBrot.hpp"
 #include "Shapes/Shapes.hpp"
