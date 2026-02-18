@@ -1,4 +1,5 @@
 #include "Cube.hpp"
+#include "glm/ext/matrix_clip_space.hpp"
 
 void DrawCube() {
   if (!glfwInit()) {
@@ -73,6 +74,11 @@ void DrawCube() {
 
     glClearColor(0.f, 0.1f, 0.1f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT);
+    glm::mat4 view = glm::mat4(
+        1.0f); // make sure to initialize matrix to identity matrix first
+    glm::mat4 projection = glm::mat4(1.0f);
+    projection = glm::perspective(glm::radians(45.0f), 1.f, 0.1f, 100.0f);
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
