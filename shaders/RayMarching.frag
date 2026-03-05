@@ -92,9 +92,11 @@ void main()
 		for(i = 0; i < 80; i++)
 		{
 			vec3 p = ray_origin + ray_direction * t;
-			p.xy *= rot2D(t*0.2 * uMouse.x);
+			// p.xy *= rot2D(t*0.2 * uMouse.x);
+			p.xy *= rot2D(t*0.2 );
 
-			p.y += sin(t * (uMouse.y+1.) * 0.5) * 0.35;
+			// p.y += sin(t * (uMouse.y+1.) * 0.5) * 0.35;
+			p.y += sin(t *  0.5) * 0.35;
 
 			float d = map(p);
 			t += d;

@@ -64,22 +64,12 @@ void DrawCube() {
   glm::mat4 trans = glm::mat4(1.0);
   trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
   vec = trans * vec;
-  std::cout << vec.x << vec.y << vec.z << std::endl;
 
   while (!glfwWindowShouldClose(window)) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
       glfwSetWindowShouldClose(window, true);
-
-    ourShader.use();
-
     glClearColor(0.f, 0.1f, 0.1f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT);
-    glm::mat4 view = glm::mat4(
-        1.0f); // make sure to initialize matrix to identity matrix first
-    glm::mat4 projection = glm::mat4(1.0f);
-    projection = glm::perspective(glm::radians(45.0f), 1.f, 0.1f, 100.0f);
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
     glfwSwapBuffers(window);
