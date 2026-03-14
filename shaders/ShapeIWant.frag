@@ -24,13 +24,13 @@ float square(vec2 p)
 	else{
 		return 0.0f;
 	}
-
 }
 
 void main()
 {
 		vec2 p = pos.xy - 0.5;
-		float k = square(p);
+
+
 	
-    FragColor = vec4(k,k,k,1.0);
+    FragColor = vec4(1.0, 0.0,0.0,1.0);
 }
