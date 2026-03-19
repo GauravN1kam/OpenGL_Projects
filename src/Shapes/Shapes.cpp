@@ -8,8 +8,7 @@ bool checkShaderCompile(GLuint shader, const char *name) {
   if (!success) {
     char log[1024];
     glGetShaderInfoLog(shader, 1024, nullptr, log);
-    std::cerr << "❌ Shader compile error (" << name << "):\n"
-              << log << std::endl;
+    std::cerr << "Shader compile error (" << name << "):\n" << log << std::endl;
     return false;
   }
   return true;
