@@ -3,4 +3,4 @@
 #include "Shapes/Shapes.hpp"
 #include "Triangle/Triangle.hpp"
 
-int main() { DrawShaderIWant(); }
+int main() { DrawCube(); }
