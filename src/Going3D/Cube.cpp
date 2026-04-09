@@ -122,7 +122,7 @@ void DrawCube() {
 
     // Transformations
     glm::mat4 model = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(),
-                                  glm::vec3(0.5f, 1.0f, 0.0f));
+                                  glm::vec3(1.f, 1.f, 1.0f));
 
     glm::mat4 view =
         glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
