@@ -33,8 +33,19 @@ const char *fragmentShaderSource = R"(
 out vec4 FragColor;
 in vec4 pos;
 
+vec3 palette(float t)
+{
+
+	vec3 a = vec3(0.5,0.5,0.5);
+	vec3 b = vec3(0.5,0.5,0.5);
+	vec3 c = vec3(1.0,1.0,1.0);
+	vec3 d = vec3(0.263, 0.146,0.557);
+
+	return a + b*cos(6.28318*(c*t+d));
+}
+
 void main() {
-    FragColor = pos;
+    FragColor = vec4(palette(pos.x), 1.0f);
 }
 )";
 
@@ -128,7 +139,7 @@ void DrawCube() {
 
     // Transformations
     glm::mat4 model = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(),
-                                  glm::vec3(1.f, 1.f, 1.0f));
+                                  glm::vec3(0.f, 1.f, 1.0f));
 
     glm::mat4 view =
         glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
