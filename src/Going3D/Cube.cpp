@@ -45,7 +45,8 @@ vec3 palette(float t)
 }
 
 void main() {
-    FragColor = vec4(palette(pos.x), 1.0f);
+
+    FragColor = vec4(1.f,pos.x,pos.y, pos.z);
 }
 )";
 
@@ -138,8 +139,8 @@ void DrawCube() {
     glUseProgram(shaderProgram);
 
     // Transformations
-    glm::mat4 model = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(),
-                                  glm::vec3(0.f, 1.f, 1.0f));
+    glm::mat4 model =
+        glm::rotate(glm::mat4(1.0f), 0.785f, glm::vec3(1.f, 1.f, 1.0f));
 
     glm::mat4 view =
         glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
