@@ -4,5 +4,5 @@ uniform float u_Time;
 
 void main() {
     // Adjust x by aspect ratio to keep it square
-    gl_Position = vec4(aPos.x / aspect, aPos.y, aPos.z, 1.0);
+    gl_Position = vec4(aPos, 1.0);
 }
