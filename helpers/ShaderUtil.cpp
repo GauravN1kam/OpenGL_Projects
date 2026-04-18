@@ -1,4 +1,5 @@
 #include "ShaderUtil.hpp"
+#include "glm/ext/matrix_float4x4.hpp"
 #include <string>
 
 Shader::Shader(const char *vertexPath, const char *fragmentPath) {
@@ -92,6 +93,11 @@ void Shader::setFloat(const std::string &name, float value) const {
 
 void Shader::Set2Float(const std::string &name, float val1, float val2) const {
   glUniform2f(glGetUniformLocation(ID, name.c_str()), val1, val2);
+}
+
+void Shader::SetMat4(const std::string &name, const glm::mat4 &mat4) const {
+  glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE,
+                     glm::value_ptr(mat4));
 }
 
 Shader::~Shader() { glDeleteProgram(ID); }

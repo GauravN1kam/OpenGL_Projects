@@ -99,22 +99,22 @@ void DrawCube() {
   glEnable(GL_DEPTH_TEST);
 
   // Build shaders
-  unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-  glCompileShader(vertexShader);
-
-  unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-  glCompileShader(fragmentShader);
-
-  unsigned int shaderProgram = glCreateProgram();
-  glAttachShader(shaderProgram, vertexShader);
-  glAttachShader(shaderProgram, fragmentShader);
-  glLinkProgram(shaderProgram);
-
-  glDeleteShader(vertexShader);
-  glDeleteShader(fragmentShader);
-
+  // unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+  // glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+  // glCompileShader(vertexShader);
+  //
+  // unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+  // glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+  // glCompileShader(fragmentShader);
+  //
+  // unsigned int shaderProgram = glCreateProgram();
+  // glAttachShader(shaderProgram, vertexShader);
+  // glAttachShader(shaderProgram, fragmentShader);
+  // glLinkProgram(shaderProgram);
+  //
+  // glDeleteShader(vertexShader);
+  // glDeleteShader(fragmentShader);
+  //
   // VAO & VBO
   unsigned int VAO, VBO;
   glGenVertexArrays(1, &VAO);
@@ -137,7 +137,7 @@ void DrawCube() {
     glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glUseProgram(shaderProgram);
+    // glUseProgram(shaderProgram);
 
     // Transformations
     glm::mat4 model =
@@ -148,16 +148,21 @@ void DrawCube() {
 
     glm::mat4 projection = glm::perspective(
         glm::radians(45.0f), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
+    shader.use();
+    shader.SetMat4("model", model);
+    shader.SetMat4("view", view);
+    shader.SetMat4("projection", projection);
 
-    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1,
-                       GL_FALSE, glm::value_ptr(model));
-
-    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE,
-                       glm::value_ptr(view));
-
-    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1,
-                       GL_FALSE, glm::value_ptr(projection));
-
+    // glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1,
+    //                    GL_FALSE, glm::value_ptr(model));
+    //
+    // glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1,
+    // GL_FALSE,
+    //                    glm::value_ptr(view));
+    //
+    // glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1,
+    //                    GL_FALSE, glm::value_ptr(projection));
+    //
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 

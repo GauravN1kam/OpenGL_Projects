@@ -1,6 +1,8 @@
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
 #include <fstream>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -17,6 +19,7 @@ public:
   void setInt(const std::string &name, int value) const;
   void setFloat(const std::string &name, float value) const;
   void Set2Float(const std::string &name, float val1, float val2) const;
+  void SetMat4(const std::string &name, const glm::mat4 &mat4) const;
 
   ~Shader();
 };
