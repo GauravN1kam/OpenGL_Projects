@@ -121,7 +121,7 @@ void DrawCube() {
   glGenBuffers(1, &VBO);
 
   glBindVertexArray(VAO);
-  Shader shader = Shader("../shaders/Cube.vert", "../../shaders/Cube.frag");
+  Shader shader = Shader("../shaders/Cube.vert", "../shaders/Cube.frag");
 
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);

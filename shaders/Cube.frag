@@ -1,8 +1,20 @@
 #version 330 core
-layout(location = 0) in vec3 aPos;
-uniform float u_Time;
+out vec4 FragColor;
+in vec4 pos;
+
+vec3 palette(float t)
+{
+
+	vec3 a = vec3(0.5,0.5,0.5);
+	vec3 b = vec3(0.5,0.5,0.5);
+	vec3 c = vec3(1.0,1.0,1.0);
+	vec3 d = vec3(0.263, 0.146,0.557);
+
+	return a + b*cos(6.28318*(c*t+d));
+}
 
 void main() {
-    // Adjust x by aspect ratio to keep it square
-    gl_Position = vec4(aPos, 1.0);
+
+    FragColor = vec4(1.f,pos.x,pos.y, pos.z);
 }
+
