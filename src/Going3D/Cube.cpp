@@ -96,17 +96,6 @@ void DrawCube() {
     shader.SetMat4("model", model);
     shader.SetMat4("view", view);
     shader.SetMat4("projection", projection);
-
-    // glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1,
-    //                    GL_FALSE, glm::value_ptr(model));
-    //
-    // glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1,
-    // GL_FALSE,
-    //                    glm::value_ptr(view));
-    //
-    // glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1,
-    //                    GL_FALSE, glm::value_ptr(projection));
-    //
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 
