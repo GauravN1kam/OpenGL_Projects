@@ -15,6 +15,6 @@ vec3 palette(float t)
 
 void main() {
 
-    FragColor = vec4(1.f,pos.x,pos.y, pos.z);
+    FragColor = vec4(0.4f,pos.x,pos.y, pos.z);
 }
 
