@@ -18,6 +18,8 @@ void framebuffer_size_callback_Shapes(GLFWwindow *window, int width,
   glViewport(0, 0, width, height);
 }
 
+void DrawCircle() {}
+
 void DrawSqaure() {
   if (!glfwInit()) {
     std::cout << "Failed to create a Window" << std::endl;

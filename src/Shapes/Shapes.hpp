@@ -5,3 +5,4 @@
 void DrawSqaure();
 void DrawRayMarchingSpace();
 void DrawShaderIWant();
+void DrawCircle();
