@@ -37,8 +37,6 @@ void DrawSqaure() {
     return;
   }
 
-  // Loading Shaders from file
-
   std::string vertexShaderString = readShader("../shaders/Shapes.vert");
   std::string fragmentShaderString = readShader("../shaders/Shapes.frag");
 
