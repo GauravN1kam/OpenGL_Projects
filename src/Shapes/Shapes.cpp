@@ -1,5 +1,7 @@
 #include "Shapes.hpp"
+#include "../../helpers/ShaderUtil.hpp"
 #include <iostream>
+#include <vector>
 
 bool checkShaderCompile(GLuint shader, const char *name) {
   GLint success;
@@ -13,12 +15,109 @@ bool checkShaderCompile(GLuint shader, const char *name) {
   }
   return true;
 }
+
 void framebuffer_size_callback_Shapes(GLFWwindow *window, int width,
                                       int height) {
   glViewport(0, 0, width, height);
 }
 
-void DrawCircle() {}
+std::vector<float> generateCircleVertices(float radius, int segments) {
+  std::vector<float> vertices;
+
+  // Center of circle
+  vertices.push_back(0.0f);
+  vertices.push_back(0.0f);
+  vertices.push_back(0.0f);
+
+  for (int i = 0; i <= segments; i++) {
+    float angle = 2.0f * M_PI * i / segments;
+
+    float x = radius * cos(angle);
+    float y = radius * sin(angle);
+
+    vertices.push_back(x);
+    vertices.push_back(y);
+    vertices.push_back(0.0f);
+  }
+
+  return vertices;
+}
+
+void DrawCircle() {
+  glfwInit();
+  std::vector<float> vertices = generateCircleVertices(0.5f, 100);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+  GLFWwindow *window = glfwCreateWindow(800, 800, "OpenGL Cube", NULL, NULL);
+  if (!window) {
+    std::cout << "Failed to create GLFW window\n";
+    glfwTerminate();
+    return;
+  }
+
+  glfwMakeContextCurrent(window);
+  glfwSetFramebufferSizeCallback(window, framebuffer_size_callback_Shapes);
+
+  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    std::cout << "Failed to initialize GLAD\n";
+    return;
+  }
+
+  glEnable(GL_DEPTH_TEST);
+
+  // VAO & VBO
+  unsigned int VAO, VBO;
+  glGenVertexArrays(1, &VAO);
+  glGenBuffers(1, &VBO);
+
+  glBindVertexArray(VAO);
+  Shader shader = Shader("../shaders/Cube.vert", "../shaders/Cube.frag");
+
+  glBindBuffer(GL_ARRAY_BUFFER, VBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices.data(),
+               GL_STATIC_DRAW);
+
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+  glEnableVertexAttribArray(0);
+
+  // Render loop
+  while (!glfwWindowShouldClose(window)) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+      glfwSetWindowShouldClose(window, true);
+
+    glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    float time = glfwGetTime();
+
+    // Transformations
+    glm::mat4 model =
+        glm::rotate(glm::mat4(1.0f), time, glm::vec3(0.f, 1.f, 0.0f));
+
+    glm::mat4 view =
+        glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
+
+    glm::mat4 projection =
+        glm::perspective(glm::radians(45.0f), (float)800 / 800, 0.1f, 100.0f);
+    shader.use();
+    shader.SetMat4("model", model);
+    shader.SetMat4("view", view);
+    shader.SetMat4("projection", projection);
+    glBindVertexArray(VAO);
+    // glDrawArrays(GL_TRIANGLES, 0, 36);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.size() / 3);
+
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+  }
+
+  glDeleteVertexArrays(1, &VAO);
+  glDeleteBuffers(1, &VBO);
+
+  glfwTerminate();
+}
 
 void DrawSqaure() {
   if (!glfwInit()) {
