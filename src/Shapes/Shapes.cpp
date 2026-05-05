@@ -45,12 +45,11 @@ std::vector<float> generateCircleVertices(float radius, int segments) {
 
 void DrawCircle() {
   glfwInit();
-  std::vector<float> vertices = generateCircleVertices(0.5f, 100);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  GLFWwindow *window = glfwCreateWindow(800, 800, "OpenGL Cube", NULL, NULL);
+  GLFWwindow *window = glfwCreateWindow(800, 800, "Circle", NULL, NULL);
   if (!window) {
     std::cout << "Failed to create GLFW window\n";
     glfwTerminate();
@@ -65,7 +64,8 @@ void DrawCircle() {
     return;
   }
 
-  glEnable(GL_DEPTH_TEST);
+  // ✅ Generate circle vertices
+  std::vector<float> vertices = generateCircleVertices(0.5f, 100);
 
   // VAO & VBO
   unsigned int VAO, VBO;
@@ -73,14 +73,16 @@ void DrawCircle() {
   glGenBuffers(1, &VBO);
 
   glBindVertexArray(VAO);
-  Shader shader = Shader("../shaders/Cube.vert", "../shaders/Cube.frag");
 
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices.data(),
-               GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float),
+               vertices.data(), GL_STATIC_DRAW);
 
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
   glEnableVertexAttribArray(0);
+
+  // ✅ Use simple shaders (make sure paths are correct)
+  Shader shader("../shaders/circle.vert", "../shaders/circle.frag");
 
   // Render loop
   while (!glfwWindowShouldClose(window)) {
@@ -88,25 +90,20 @@ void DrawCircle() {
       glfwSetWindowShouldClose(window, true);
 
     glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
 
-    float time = glfwGetTime();
-
-    // Transformations
-    glm::mat4 model =
-        glm::rotate(glm::mat4(1.0f), time, glm::vec3(0.f, 1.f, 0.0f));
-
-    glm::mat4 view =
-        glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
-
-    glm::mat4 projection =
-        glm::perspective(glm::radians(45.0f), (float)800 / 800, 0.1f, 100.0f);
     shader.use();
+
+    // ✅ Identity matrices (no camera confusion)
+    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 view = glm::mat4(1.0f);
+    glm::mat4 projection = glm::mat4(1.0f);
+
     shader.SetMat4("model", model);
     shader.SetMat4("view", view);
     shader.SetMat4("projection", projection);
+
     glBindVertexArray(VAO);
-    // glDrawArrays(GL_TRIANGLES, 0, 36);
     glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.size() / 3);
 
     glfwSwapBuffers(window);
