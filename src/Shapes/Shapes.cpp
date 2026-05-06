@@ -24,7 +24,6 @@ void framebuffer_size_callback_Shapes(GLFWwindow *window, int width,
 std::vector<float> generateCircleVertices(float radius, int segments) {
   std::vector<float> vertices;
 
-  // Center of circle
   vertices.push_back(0.0f);
   vertices.push_back(0.0f);
   vertices.push_back(0.0f);
