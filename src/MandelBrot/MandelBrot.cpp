@@ -1,5 +1,4 @@
 #include "MandelBrot.hpp"
-
 void DrawMandelBrot() {
   if (!glfwInit()) {
     std::cout << "Failed to create a Window" << std::endl;
