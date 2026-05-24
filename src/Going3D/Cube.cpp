@@ -97,7 +97,6 @@ void DrawCube() {
     shader.SetMat4("projection", projection);
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
-
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
