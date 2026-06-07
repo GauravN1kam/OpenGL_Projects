@@ -7,3 +7,4 @@
 #include <GLFW/glfw3.h>
 
 void DrawSineFunction();
+void DrawLine();
