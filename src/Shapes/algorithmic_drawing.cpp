@@ -1,4 +1,5 @@
 #include "algorithmic_drawing.hpp"
+#include "../../helpers/ShaderUtil.hpp"
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -27,4 +28,12 @@ void DrawLine() {
 
   Shader shader = Shader("../shaders/ShapingFunctions/basicvert.vert",
                          "../shaders/ShapingFunctions/StarightLine.frag");
+
+  while (!glfwWindowShouldClose(window)) {
+    glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+  }
 }
