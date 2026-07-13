@@ -2,6 +2,7 @@
 #include "glm/ext/matrix_float4x4.hpp"
 #include <string>
 
+// Shader util to load shaders
 Shader::Shader(const char *vertexPath, const char *fragmentPath) {
   // 1. retrieve the vertex/fragment source code from filePath
   std::string vertexCode;
